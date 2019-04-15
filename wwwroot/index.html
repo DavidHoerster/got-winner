@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="static/default.css" rel="stylesheet" />
+    <title>GoT: Who Will Win???</title>
+</head>
+
+<body>
+    <div id="container">
+        <center>
+            <div id="logo">GoT: Who Will Win??</div>
+            <div id="space"></div>
+            <div id="form">
+                <button name="vote" value="DANY" class="button button1">Dany</button>
+                <button name="vote" value="JON" class="button button2">Jon Snow / Aegon</button>
+                <button name="vote" value="TYRION" class="button button1">Tyrion</button>
+                <button name="vote" value="CERSEI" class="button button2">Cersei</button>
+                <button name="vote" value="SANSA" class="button button1">Sansa</button>
+                <button name="vote" value="RESET" class="button button3">Reset</button>
+                <div id="space"></div>
+                <div id="space"></div>
+                <div id="results"></div>
+            </div>
+        </center>
+    </div>
+
+    <!--Reference the SignalR library. -->
+    <script type="text/javascript"
+        src="https://cdn.jsdelivr.net/npm/@aspnet/signalr@1.1.0/dist/browser/signalr.min.js"></script>
+
+    <!--Add script to update the page and send messages.-->
+    <script type="text/javascript">
+        document.addEventListener('DOMContentLoaded', function () {
+
+
+            function bindConnectionMessage(connection) {
+                var messageCallback = function (voteList) {
+                    var resultsDiv = document.getElementById('results');
+                    resultsDiv.innerHTML = "";
+
+                    for (let index = 0; index < voteList.length; index++) {
+                        const element = voteList[index];
+                        var innerDiv = document.createElement('div');
+                        innerDiv.innerHTML = element.name + ' - ' + element.votes;
+                        resultsDiv.appendChild(innerDiv);
+                    }
+
+                }
+                // Create a function that the hub can call to broadcast messages.
+                connection.on('broadcastVotes', messageCallback);
+                connection.onclose(onConnectionError);
+            }
+
+
+            function onConnected(connection) {
+                console.log('connection started');
+
+                var btns = document.getElementsByName('vote');
+                for (let index = 0; index < btns.length; index++) {
+                    const element = btns[index];
+                    element.addEventListener('click', function (event) {
+                        var vote = this.value;
+                        connection.send('recordVote', vote);
+                        event.preventDefault();
+                    });
+                }
+            }
+
+            function onConnectionError(error) {
+                if (error && error.message) {
+                    console.error(error.message);
+                }
+                var modal = document.getElementById('myModal');
+                modal.classList.add('in');
+                modal.style = 'display: block;';
+            }
+
+            var connection = new signalR.HubConnectionBuilder()
+                .withUrl('/vote')
+                .build();
+            bindConnectionMessage(connection);
+            connection.start()
+                .then(function () {
+                    onConnected(connection);
+                })
+                .catch(function (error) {
+                    console.error(error.message);
+                });
+        });
+
+    </script>
+</body>
+
+</html>
