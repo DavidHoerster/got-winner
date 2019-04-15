@@ -61,6 +61,7 @@ namespace got_winner_voting
             );
 
             var cache = Globals.GlobalItems.RedisConnection.Value.GetDatabase();
+            cache.KeyDeleteAsync("got").GetAwaiter().GetResult();
             cache.HashSet("got", "DANY", 0);
             cache.HashSet("got", "JON", 0);
             cache.HashSet("got", "TYRION", 0);
