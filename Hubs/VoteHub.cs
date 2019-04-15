@@ -26,6 +26,7 @@ namespace got_winner_voting.Hubs
 
                 client.TrackDependency("Redis Cache", "Reset All Character Votes", "data", date, new TimeSpan(DateTimeOffset.UtcNow.Ticks - date.Ticks), true);
 
+                client.TrackEvent("reset-vote");
             }
             else
             {
@@ -33,6 +34,7 @@ namespace got_winner_voting.Hubs
 
                 client.TrackDependency("Redis Cache", $"Get Votes for {character}", "data", date, new TimeSpan(DateTimeOffset.UtcNow.Ticks - date.Ticks), true);
 
+                client.TrackEvent($"{character}-vote");
             }
             var votes = await GetVotesAsync(cache);
             await Clients.All.BroadcastVotes(votes);
