@@ -20,18 +20,18 @@
 <body>
     <div id="container">
         <center>
-            <div id="logo">GoT: Who Will Win??</div>
+            <div id="logo">GoT: Who Will Win?? Create Snapshot</div>
             <div id="space"></div>
             <div id="form">
-                <button name="vote" value="DANY" class="button button1">Dany</button>
-                <button name="vote" value="JON" class="button button2">Jon Snow / Aegon</button>
-                <button name="vote" value="TYRION" class="button button1">Tyrion</button>
-                <button name="vote" value="CERSEI" class="button button2">Cersei</button>
-                <button name="vote" value="SANSA" class="button button1">Sansa</button>
-                <button name="vote" value="RESET" class="button button3">Reset</button>
+                <form method="POST" id="snapForm" action="api/snapshot" enctype="application/x-www-form-urlencoded">
+                    Snapshot Label: <input type="text" id="name" name="name" />
+                    <br />
+                    <button type="submit" id="formSubmit" name="submit" value="Submit"
+                        class="button button1">Submit</button>
+                </form>
                 <div id="space"></div>
-                <a href="snapshot.html" class="button">Create Snapshot</a>
                 <div id="space"></div>
+                <hr />
                 <div id="results"></div>
             </div>
         </center>
@@ -57,6 +57,13 @@
 
         document.addEventListener('DOMContentLoaded', function () {
 
+            var formSubmit = document.getElementById('formSubmit');
+            formSubmit.addEventListener('click', function (event) {
+                var theForm = document.getElementById('snapForm');
+                var snapName = document.getElementById('name').value;
+                theForm.action = "api/snapshot/" + snapName;
+                theForm.submit();
+            })
 
             var xhr = new XMLHttpRequest();
             xhr.open('GET', '/api/character');
@@ -71,18 +78,6 @@
             xhr.send();
 
             function bindConnectionMessage(connection) {
-                // var messageCallback = function (voteList) {
-                //     var resultsDiv = document.getElementById('results');
-                //     resultsDiv.innerHTML = "";
-
-                //     for (let index = 0; index < voteList.length; index++) {
-                //         const element = voteList[index];
-                //         var innerDiv = document.createElement('div');
-                //         innerDiv.innerHTML = element.name + ' - ' + element.votes;
-                //         resultsDiv.appendChild(innerDiv);
-                //     }
-
-                // }
                 // Create a function that the hub can call to broadcast messages.
                 connection.on('broadcastVotes', populateVotes);
                 connection.onclose(onConnectionError);
@@ -91,16 +86,6 @@
 
             function onConnected(connection) {
                 console.log('connection started');
-
-                var btns = document.getElementsByName('vote');
-                for (let index = 0; index < btns.length; index++) {
-                    const element = btns[index];
-                    element.addEventListener('click', function (event) {
-                        var vote = this.value;
-                        connection.send('recordVote', vote);
-                        event.preventDefault();
-                    });
-                }
             }
 
             function onConnectionError(error) {

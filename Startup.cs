@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 using got_winner_voting.Hubs;
@@ -54,6 +55,7 @@ namespace got_winner_voting
                 routes.MapHub<VoteHub>("/vote");
             });
 
+            Globals.GlobalItems.SqlConnectionStr = Configuration["Azure:Sql:ConnectionString"];
             Globals.GlobalItems.RedisConnection = new Lazy<ConnectionMultiplexer>(() =>
                 ConnectionMultiplexer.Connect(Configuration["Azure:Redis:CacheConnection"])
             );
