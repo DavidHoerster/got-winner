@@ -13,9 +13,10 @@ namespace got_winner_voting.Controllers
         public async Task<ActionResult> Get()
         {
 
-            throw new InvalidOperationException("You tried to do something bad");
+            // throw new InvalidOperationException("You tried to do something bad");
 
-            return BadRequest();
+            // return BadRequest();
+            return Ok("all good now!");
         }
     }
 }
