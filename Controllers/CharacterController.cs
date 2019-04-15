@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using got_winner_voting.Model;
 using Microsoft.AspNetCore.Mvc;
 using StackExchange.Redis;
+using Microsoft.ApplicationInsights;
 
 namespace got_winner_voting.Controllers
 {
@@ -16,8 +17,16 @@ namespace got_winner_voting.Controllers
         [HttpGet("")]
         public async Task<ActionResult<IEnumerable<Character>>> GetAll()
         {
+            var date = DateTimeOffset.UtcNow;
+            var client = new TelemetryClient();
+
             var db = Globals.GlobalItems.RedisConnection.Value.GetDatabase();
             var chars = await db.HashGetAllAsync("got");
+
+
+            client.TrackDependency("Redis Cache", "Get All Characters", "data", date, new TimeSpan(DateTimeOffset.UtcNow.Ticks - date.Ticks), true);
+
+
             var charList = chars.Select(c =>
             {
                 if (!c.Value.TryParse(out long votes))

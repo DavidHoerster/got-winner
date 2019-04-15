@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using got_winner_voting.Model;
+using Microsoft.ApplicationInsights;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging;
 using StackExchange.Redis;
@@ -13,6 +14,8 @@ namespace got_winner_voting.Hubs
     {
         public async Task RecordVote(string character)
         {
+            var client = new TelemetryClient();
+            var date = DateTimeOffset.UtcNow;
             IDatabase cache = Globals.GlobalItems.RedisConnection.Value.GetDatabase();
 
             if (character.Equals("RESET", StringComparison.OrdinalIgnoreCase))
@@ -20,10 +23,16 @@ namespace got_winner_voting.Hubs
                 var chars = await cache.HashGetAllAsync("got");
                 var updChars = chars.Select(c => new HashEntry(c.Name, 0)).ToArray();
                 await cache.HashSetAsync("got", updChars);
+
+                client.TrackDependency("Redis Cache", "Reset All Character Votes", "data", date, new TimeSpan(DateTimeOffset.UtcNow.Ticks - date.Ticks), true);
+
             }
             else
             {
                 var newValue = await cache.HashIncrementAsync("got", character);
+
+                client.TrackDependency("Redis Cache", $"Get Votes for {character}", "data", date, new TimeSpan(DateTimeOffset.UtcNow.Ticks - date.Ticks), true);
+
             }
             var votes = await GetVotesAsync(cache);
             await Clients.All.BroadcastVotes(votes);
