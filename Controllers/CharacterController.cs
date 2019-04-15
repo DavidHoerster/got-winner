@@ -71,8 +71,6 @@ namespace got_winner_voting.Controllers
             var updChars = chars.Select(c => new HashEntry(c.Name, 0)).ToArray();
             await db.HashSetAsync("got", updChars);
 
-            //var charList = chars.Select(c => new Character { Id = c.Name, Votes = 0 });
-
             return Ok();
         }
     }

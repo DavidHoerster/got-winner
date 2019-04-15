@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using got_winner_voting.Hubs;
 using got_winner_voting.Service;
+using Microsoft.ApplicationInsights;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -61,6 +62,9 @@ namespace got_winner_voting
                 ConnectionMultiplexer.Connect(Configuration["Azure:Redis:CacheConnection"])
             );
 
+            var client = new TelemetryClient();
+
+            var date = DateTimeOffset.UtcNow;
             var cache = Globals.GlobalItems.RedisConnection.Value.GetDatabase();
             cache.KeyDeleteAsync("got").GetAwaiter().GetResult();
 
@@ -69,12 +73,8 @@ namespace got_winner_voting
             {
                 cache.HashSet("got", character.Id, 0);
             }
-            // cache.HashSet("got", "DANY", 0);
-            // cache.HashSet("got", "JON", 0);
-            // cache.HashSet("got", "TYRION", 0);
-            // cache.HashSet("got", "CERSEI", 0);
-            // cache.HashSet("got", "SANSA", 0);
 
+            client.TrackDependency("Redis Cache", "Reset All Characters for Startup", "startup", date, new TimeSpan(DateTimeOffset.UtcNow.Ticks - date.Ticks), true);
         }
     }
 }

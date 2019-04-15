@@ -72,18 +72,6 @@
             xhr.send();
 
             function bindConnectionMessage(connection) {
-                // var messageCallback = function (voteList) {
-                //     var resultsDiv = document.getElementById('results');
-                //     resultsDiv.innerHTML = "";
-
-                //     for (let index = 0; index < voteList.length; index++) {
-                //         const element = voteList[index];
-                //         var innerDiv = document.createElement('div');
-                //         innerDiv.innerHTML = element.name + ' - ' + element.votes;
-                //         resultsDiv.appendChild(innerDiv);
-                //     }
-
-                // }
                 // Create a function that the hub can call to broadcast messages.
                 connection.on('broadcastVotes', populateVotes);
                 connection.onclose(onConnectionError);
