@@ -4,6 +4,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 using got_winner_voting.Hubs;
+using got_winner_voting.Service;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -62,11 +63,17 @@ namespace got_winner_voting
 
             var cache = Globals.GlobalItems.RedisConnection.Value.GetDatabase();
             cache.KeyDeleteAsync("got").GetAwaiter().GetResult();
-            cache.HashSet("got", "DANY", 0);
-            cache.HashSet("got", "JON", 0);
-            cache.HashSet("got", "TYRION", 0);
-            cache.HashSet("got", "CERSEI", 0);
-            cache.HashSet("got", "SANSA", 0);
+
+            var chars = CharacterInit.GetCharactersAsync().GetAwaiter().GetResult();
+            foreach (var character in chars)
+            {
+                cache.HashSet("got", character.Id, 0);
+            }
+            // cache.HashSet("got", "DANY", 0);
+            // cache.HashSet("got", "JON", 0);
+            // cache.HashSet("got", "TYRION", 0);
+            // cache.HashSet("got", "CERSEI", 0);
+            // cache.HashSet("got", "SANSA", 0);
 
         }
     }

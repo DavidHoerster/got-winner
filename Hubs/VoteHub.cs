@@ -47,7 +47,7 @@ namespace got_winner_voting.Hubs
                 {
                     votes = 0;
                 }
-                return new Character { Name = c.Name, Votes = votes };
+                return new Character { Id = c.Name, Votes = votes };
             });
             return charList;
         }
