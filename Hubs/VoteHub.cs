@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using got_winner_voting.Model;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.Extensions.Logging;
 using StackExchange.Redis;
 
 namespace got_winner_voting.Hubs
