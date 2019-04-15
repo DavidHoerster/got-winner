@@ -25,9 +25,10 @@
             <div id="form">
                 <button name="vote" value="DANY" class="button button1">Dany</button>
                 <button name="vote" value="JON" class="button button2">Jon Snow / Aegon</button>
-                <button name="vote" value="TYRION" class="button button1">Tyrion</button>
-                <button name="vote" value="CERSEI" class="button button2">Cersei</button>
-                <button name="vote" value="SANSA" class="button button1">Sansa</button>
+                <button name="vote" value="TYRION" class="button button1">Tyrion Lannister</button>
+                <button name="vote" value="CERSEI" class="button button2">Cersei Lannister</button>
+                <button name="vote" value="SANSA" class="button button1">Sansa Stark</button>
+                <button name="vote" value="NIGHTKING" class="button button2">Night King</button>
                 <button name="vote" value="RESET" class="button button3">Reset</button>
                 <div id="space"></div>
                 <a href="snapshot.html" class="button">Create Snapshot</a>
@@ -50,7 +51,7 @@
             for (let index = 0; index < voteList.length; index++) {
                 const element = voteList[index];
                 var innerDiv = document.createElement('div');
-                innerDiv.innerHTML = element.name + ' - ' + element.votes;
+                innerDiv.innerHTML = element.id + ' - ' + element.votes;
                 resultsDiv.appendChild(innerDiv);
             }
         }

@@ -33,7 +33,7 @@ namespace got_winner_voting.Controllers
                 {
                     votes = 0;
                 }
-                return new Character { Name = c.Name, Votes = votes };
+                return new Character { Id = c.Name, Votes = votes };
             });
 
             return Ok(charList);
@@ -71,7 +71,7 @@ namespace got_winner_voting.Controllers
             var updChars = chars.Select(c => new HashEntry(c.Name, 0)).ToArray();
             await db.HashSetAsync("got", updChars);
 
-            var charList = chars.Select(c => new Character { Name = c.Name, Votes = 0 });
+            //var charList = chars.Select(c => new Character { Id = c.Name, Votes = 0 });
 
             return Ok();
         }

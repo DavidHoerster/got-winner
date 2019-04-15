@@ -50,7 +50,7 @@
             for (let index = 0; index < voteList.length; index++) {
                 const element = voteList[index];
                 var innerDiv = document.createElement('div');
-                innerDiv.innerHTML = element.name + ' - ' + element.votes;
+                innerDiv.innerHTML = element.id + ' - ' + element.votes;
                 resultsDiv.appendChild(innerDiv);
             }
         }
