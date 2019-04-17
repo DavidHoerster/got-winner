@@ -23,9 +23,6 @@ namespace got_winner_voting.Controllers
             var db = Globals.GlobalItems.RedisConnection.Value.GetDatabase();
             var chars = await db.HashGetAllAsync("got");
 
-
-            client.TrackDependency("Redis Cache", "Get All Characters", "data", date, new TimeSpan(DateTimeOffset.UtcNow.Ticks - date.Ticks), true);
-
             var charList = chars.Select(c =>
             {
                 if (!c.Value.TryParse(out long votes))
@@ -34,6 +31,11 @@ namespace got_winner_voting.Controllers
                 }
                 return new Snapshot { SnapName = name, Name = c.Name, Votes = votes };
             });
+
+            var data = String.Join(";", charList.Select(c => $"{c.Name} = {c.Votes} votes").ToArray());
+
+            client.TrackDependency("Redis Cache", "Get All Characters", data, date, new TimeSpan(DateTimeOffset.UtcNow.Ticks - date.Ticks), true);
+
 
             using (var conn = new SqlConnection(Globals.GlobalItems.SqlConnectionStr))
             {
