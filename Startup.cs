@@ -34,6 +34,13 @@ namespace got_winner_voting
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             services.AddSignalR()
                     .AddAzureSignalR();
+
+            services.AddSingleton<Lazy<ConnectionMultiplexer>>((p) =>
+                new Lazy<ConnectionMultiplexer>(() =>
+                    ConnectionMultiplexer.Connect(Configuration["Azure:Redis:CacheConnection"]))
+            );
+
+            services.AddHostedService<CharacterInit>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -57,24 +64,24 @@ namespace got_winner_voting
                 routes.MapHub<VoteHub>("/vote");
             });
 
-            Globals.GlobalItems.SqlConnectionStr = Configuration["Azure:Sql:ConnectionString"];
-            Globals.GlobalItems.RedisConnection = new Lazy<ConnectionMultiplexer>(() =>
-                ConnectionMultiplexer.Connect(Configuration["Azure:Redis:CacheConnection"])
-            );
+            // Globals.GlobalItems.SqlConnectionStr = Configuration["Azure:Sql:ConnectionString"];
+            // Globals.GlobalItems.RedisConnection = new Lazy<ConnectionMultiplexer>(() =>
+            //     ConnectionMultiplexer.Connect(Configuration["Azure:Redis:CacheConnection"])
+            // );
 
-            var client = new TelemetryClient();
+            // var client = new TelemetryClient();
 
-            var date = DateTimeOffset.UtcNow;
-            var cache = Globals.GlobalItems.RedisConnection.Value.GetDatabase();
-            cache.KeyDeleteAsync("got").GetAwaiter().GetResult();
+            // var date = DateTimeOffset.UtcNow;
+            // var cache = Globals.GlobalItems.RedisConnection.Value.GetDatabase();
+            // cache.KeyDeleteAsync("got").GetAwaiter().GetResult();
 
-            var chars = CharacterInit.GetCharactersAsync().GetAwaiter().GetResult();
-            foreach (var character in chars)
-            {
-                cache.HashSet("got", character.Id, 0);
-            }
+            // var chars = CharacterInit.GetCharactersAsync(Configuration).GetAwaiter().GetResult();
+            // foreach (var character in chars)
+            // {
+            //     cache.HashSet("got", character.Id, 0);
+            // }
 
-            client.TrackDependency("Redis Cache", "Reset All Characters for Startup", "startup", date, new TimeSpan(DateTimeOffset.UtcNow.Ticks - date.Ticks), true);
+            // client.TrackDependency("Redis Cache", "Reset All Characters for Startup", "startup", date, new TimeSpan(DateTimeOffset.UtcNow.Ticks - date.Ticks), true);
         }
     }
 }
