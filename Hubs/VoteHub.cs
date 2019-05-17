@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using got_winner_voting.Model;
 using Microsoft.ApplicationInsights;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using StackExchange.Redis;
 
@@ -12,17 +13,24 @@ namespace got_winner_voting.Hubs
 {
     public class VoteHub : Hub<IVoteHub>
     {
+        private readonly IConfiguration _config;
+        private Lazy<ConnectionMultiplexer> _cache;
+        public VoteHub(IConfiguration config, Lazy<ConnectionMultiplexer> cache)
+        {
+            _config = config;
+            _cache = cache;
+        }
         public async Task RecordVote(string character)
         {
             var client = new TelemetryClient();
             var date = DateTimeOffset.UtcNow;
-            IDatabase cache = Globals.GlobalItems.RedisConnection.Value.GetDatabase();
+            IDatabase cacheDb = _cache.Value.GetDatabase();
 
             if (character.Equals("RESET", StringComparison.OrdinalIgnoreCase))
             {
-                var chars = await cache.HashGetAllAsync("got");
+                var chars = await cacheDb.HashGetAllAsync("got");
                 var updChars = chars.Select(c => new HashEntry(c.Name, 0)).ToArray();
-                await cache.HashSetAsync("got", updChars);
+                await cacheDb.HashSetAsync("got", updChars);
 
                 client.TrackDependency("Redis Cache", "Reset All Character Votes", "data", date, new TimeSpan(DateTimeOffset.UtcNow.Ticks - date.Ticks), true);
 
@@ -30,13 +38,13 @@ namespace got_winner_voting.Hubs
             }
             else
             {
-                var newValue = await cache.HashIncrementAsync("got", character);
+                var newValue = await cacheDb.HashIncrementAsync("got", character);
 
                 client.TrackDependency("Redis Cache", $"Get Votes for {character}", "data", date, new TimeSpan(DateTimeOffset.UtcNow.Ticks - date.Ticks), true);
 
                 client.TrackEvent($"{character}-vote");
             }
-            var votes = await GetVotesAsync(cache);
+            var votes = await GetVotesAsync(cacheDb);
             await Clients.All.BroadcastVotes(votes);
         }
 

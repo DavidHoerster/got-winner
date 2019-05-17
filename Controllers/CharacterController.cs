@@ -13,6 +13,11 @@ namespace got_winner_voting.Controllers
     [ApiController]
     public class CharacterController : ControllerBase
     {
+        private Lazy<ConnectionMultiplexer> _cache;
+        public CharacterController(Lazy<ConnectionMultiplexer> cache)
+        {
+            _cache = cache;
+        }
         // GET api/values
         [HttpGet("")]
         public async Task<ActionResult<IEnumerable<Character>>> GetAll()
@@ -20,7 +25,7 @@ namespace got_winner_voting.Controllers
             var date = DateTimeOffset.UtcNow;
             var client = new TelemetryClient();
 
-            var db = Globals.GlobalItems.RedisConnection.Value.GetDatabase();
+            var db = _cache.Value.GetDatabase();
             var chars = await db.HashGetAllAsync("got");
 
 
@@ -43,7 +48,7 @@ namespace got_winner_voting.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<long>> Get(string id)
         {
-            var db = Globals.GlobalItems.RedisConnection.Value.GetDatabase();
+            var db = _cache.Value.GetDatabase();
             var character = await db.HashGetAsync("got", id);
             if (!character.TryParse(out long votes))
             {
@@ -56,7 +61,7 @@ namespace got_winner_voting.Controllers
         [HttpPost("{id}")]
         public async Task<ActionResult<long>> Post(string id)
         {
-            var db = Globals.GlobalItems.RedisConnection.Value.GetDatabase();
+            var db = _cache.Value.GetDatabase();
             var character = await db.HashGetAsync("got", id);
             var val = await db.HashIncrementAsync("got", id);
             return Ok(val);
@@ -66,7 +71,7 @@ namespace got_winner_voting.Controllers
         [HttpDelete("")]
         public async Task<ActionResult> Delete()
         {
-            var db = Globals.GlobalItems.RedisConnection.Value.GetDatabase();
+            var db = _cache.Value.GetDatabase();
             var chars = await db.HashGetAllAsync("got");
             var updChars = chars.Select(c => new HashEntry(c.Name, 0)).ToArray();
             await db.HashSetAsync("got", updChars);
