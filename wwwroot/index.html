@@ -1,128 +1,195 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
-
-<head>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <head>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
     <link href="static/default.css" rel="stylesheet" />
     <title>GoT: Who Will Win???</title>
 
     <script type="text/javascript">
-        var appInsights = window.appInsights || function (a) {
-            function b(a) { c[a] = function () { var b = arguments; c.queue.push(function () { c[a].apply(c, b) }) } } var c = { config: a }, d = document, e = window; setTimeout(function () { var b = d.createElement("script"); b.src = a.url || "https://az416426.vo.msecnd.net/scripts/a/ai.0.js", d.getElementsByTagName("script")[0].parentNode.appendChild(b) }); try { c.cookie = d.cookie } catch (a) { } c.queue = []; for (var f = ["Event", "Exception", "Metric", "PageView", "Trace", "Dependency"]; f.length;)b("track" + f.pop()); if (b("setAuthenticatedUserContext"), b("clearAuthenticatedUserContext"), b("startTrackEvent"), b("stopTrackEvent"), b("startTrackPage"), b("stopTrackPage"), b("flush"), !a.disableExceptionTracking) { f = "onerror", b("_" + f); var g = e[f]; e[f] = function (a, b, d, e, h) { var i = g && g(a, b, d, e, h); return !0 !== i && c["_" + f](a, b, d, e, h), i } } return c
-        }({
-            instrumentationKey: "ab13cd41-3101-4c62-8974-ded6dcf6b387"
+      var appInsights =
+        window.appInsights ||
+        (function(a) {
+          function b(a) {
+            c[a] = function() {
+              var b = arguments;
+              c.queue.push(function() {
+                c[a].apply(c, b);
+              });
+            };
+          }
+          var c = { config: a },
+            d = document,
+            e = window;
+          setTimeout(function() {
+            var b = d.createElement("script");
+            (b.src =
+              a.url || "https://az416426.vo.msecnd.net/scripts/a/ai.0.js"),
+              d.getElementsByTagName("script")[0].parentNode.appendChild(b);
+          });
+          try {
+            c.cookie = d.cookie;
+          } catch (a) {}
+          c.queue = [];
+          for (
+            var f = [
+              "Event",
+              "Exception",
+              "Metric",
+              "PageView",
+              "Trace",
+              "Dependency"
+            ];
+            f.length;
+
+          )
+            b("track" + f.pop());
+          if (
+            (b("setAuthenticatedUserContext"),
+            b("clearAuthenticatedUserContext"),
+            b("startTrackEvent"),
+            b("stopTrackEvent"),
+            b("startTrackPage"),
+            b("stopTrackPage"),
+            b("flush"),
+            !a.disableExceptionTracking)
+          ) {
+            (f = "onerror"), b("_" + f);
+            var g = e[f];
+            e[f] = function(a, b, d, e, h) {
+              var i = g && g(a, b, d, e, h);
+              return !0 !== i && c["_" + f](a, b, d, e, h), i;
+            };
+          }
+          return c;
+        })({
+          instrumentationKey: "ab13cd41-3101-4c62-8974-ded6dcf6b387"
         });
 
-        window.appInsights = appInsights, appInsights.queue && 0 === appInsights.queue.length && appInsights.trackPageView();
+      (window.appInsights = appInsights),
+        appInsights.queue &&
+          0 === appInsights.queue.length &&
+          appInsights.trackPageView();
     </script>
-</head>
+  </head>
 
-<body>
+  <body>
     <center>
-        <a class="button button3" href="/api/bad">Bad Link</a>
-        &nbsp;&nbsp;
-        <a class="button button2" href="/api/bad/slow">Slow Link</a>
-        &nbsp;&nbsp;
-        <button name="vote" value="RESET" class="button button3">Reset</button>
-        &nbsp;&nbsp;
-        <a href="snapshot.html" class="button">Create Snapshot</a>
+      <a class="button button3" href="/api/bad">Bad Link</a>
+      &nbsp;&nbsp;
+      <a class="button button2" href="/api/bad/slow">Slow Link</a>
+      &nbsp;&nbsp;
+      <button name="vote" value="RESET" class="button button3">Reset</button>
+      &nbsp;&nbsp;
+      <a href="snapshot.html" class="button">Create Snapshot</a>
     </center>
     <div id="container">
-        <center>
-            <div id="logo">GoT: Who Will Win The Throne??</div>
-            <div id="space"></div>
-            <div id="form">
-                <button name="vote" value="DANY" class="button button1">Daenerys Targaryen</button>
-                <button name="vote" value="JON" class="button button2">Jon Snow / Aegon Targaryen</button>
-                <button name="vote" value="TYRION" class="button button1">Tyrion Lannister</button>
-                <button name="vote" value="CERSEI" class="button button2">Cersei Lannister</button>
-                <button name="vote" value="SANSA" class="button button1">Sansa Stark</button>
-                <button name="vote" value="NIGHTKING" class="button button2">Night King</button>
+      <center>
+        <div id="logo">GoT: Who Will Win The Throne??</div>
+        <div id="space"></div>
+        <div id="form">
+          <button name="vote" value="DANY" class="button button1">
+            Daenerys Targaryen
+          </button>
+          <button name="vote" value="JON" class="button button2">
+            Jon Snow / Aegon Targaryen
+          </button>
+          <button name="vote" value="TYRION" class="button button1">
+            Tyrion Lannister
+          </button>
+          <button name="vote" value="CERSEI" class="button button2">
+            Cersei Lannister
+          </button>
+          <button name="vote" value="SANSA" class="button button1">
+            Sansa Stark
+          </button>
+          <button name="vote" value="NIGHTKING" class="button button2">
+            Night King
+          </button>
 
-                <div id="space"></div>
-                <div id="space"></div>
-                <div id="results"></div>
-            </div>
-        </center>
+          <div id="space"></div>
+          <div id="space"></div>
+          <div id="results"></div>
+        </div>
+      </center>
     </div>
 
     <!--Reference the SignalR library. -->
-    <script type="text/javascript"
-        src="https://cdn.jsdelivr.net/npm/@aspnet/signalr@1.1.0/dist/browser/signalr.min.js"></script>
+    <script
+      type="text/javascript"
+      src="https://cdn.jsdelivr.net/npm/@aspnet/signalr@1.1.0/dist/browser/signalr.min.js"
+    ></script>
 
     <!--Add script to update the page and send messages.-->
     <script type="text/javascript">
-        function populateVotes(voteList) {
-            var resultsDiv = document.getElementById('results');
-            resultsDiv.innerHTML = "";
+      function populateVotes(voteList) {
+        var resultsDiv = document.getElementById("results");
+        resultsDiv.innerHTML = "";
 
-            for (let index = 0; index < voteList.length; index++) {
-                const element = voteList[index];
-                var innerDiv = document.createElement('div');
-                innerDiv.innerHTML = element.id + ' - ' + element.votes;
-                resultsDiv.appendChild(innerDiv);
-            }
+        for (let index = 0; index < voteList.length; index++) {
+          const element = voteList[index];
+          var innerDiv = document.createElement("div");
+          innerDiv.innerHTML = element.id + " - " + element.votes;
+          resultsDiv.appendChild(innerDiv);
+        }
+      }
+
+      document.addEventListener("DOMContentLoaded", function() {
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", "/api/character");
+        xhr.onload = function() {
+          if (xhr.status === 200) {
+            populateVotes(JSON.parse(xhr.response));
+          } else {
+            alert("Request failed.  Returned status of " + xhr.status);
+          }
+        };
+        xhr.send();
+
+        function bindConnectionMessage(connection) {
+          // Create a function that the hub can call to broadcast messages.
+          connection.on("broadcastVotes", populateVotes);
+          connection.onclose(onConnectionError);
         }
 
-        document.addEventListener('DOMContentLoaded', function () {
+        function onConnected(connection) {
+          console.log("connection started");
 
+          var btns = document.getElementsByName("vote");
+          for (let index = 0; index < btns.length; index++) {
+            const element = btns[index];
+            element.addEventListener("click", function(event) {
+              var vote = this.value;
+              connection.send("recordVote", vote);
+              event.preventDefault();
+            });
+          }
+        }
 
-            var xhr = new XMLHttpRequest();
-            xhr.open('GET', '/api/character');
-            xhr.onload = function () {
-                if (xhr.status === 200) {
-                    populateVotes(JSON.parse(xhr.response));
-                }
-                else {
-                    alert('Request failed.  Returned status of ' + xhr.status);
-                }
-            };
-            xhr.send();
+        function onConnectionError(error) {
+          if (error && error.message) {
+            console.error(error.message);
+          }
+          var modal = document.getElementById("myModal");
+          modal.classList.add("in");
+          modal.style = "display: block;";
+        }
 
-            function bindConnectionMessage(connection) {
-                // Create a function that the hub can call to broadcast messages.
-                connection.on('broadcastVotes', populateVotes);
-                connection.onclose(onConnectionError);
-            }
-
-
-            function onConnected(connection) {
-                console.log('connection started');
-
-                var btns = document.getElementsByName('vote');
-                for (let index = 0; index < btns.length; index++) {
-                    const element = btns[index];
-                    element.addEventListener('click', function (event) {
-                        var vote = this.value;
-                        connection.send('recordVote', vote);
-                        event.preventDefault();
-                    });
-                }
-            }
-
-            function onConnectionError(error) {
-                if (error && error.message) {
-                    console.error(error.message);
-                }
-                var modal = document.getElementById('myModal');
-                modal.classList.add('in');
-                modal.style = 'display: block;';
-            }
-
-            var connection = new signalR.HubConnectionBuilder()
-                .withUrl('/vote')
-                .build();
-            bindConnectionMessage(connection);
-            connection.start()
-                .then(function () {
-                    onConnected(connection);
-                })
-                .catch(function (error) {
-                    console.error(error.message);
-                });
-        });
-
+        var connection = new signalR.HubConnectionBuilder()
+          .withUrl("/vote")
+          .build();
+        bindConnectionMessage(connection);
+        connection
+          .start()
+          .then(function() {
+            onConnected(connection);
+          })
+          .catch(function(error) {
+            console.error(error.message);
+          });
+      });
     </script>
-</body>
-
+  </body>
 </html>

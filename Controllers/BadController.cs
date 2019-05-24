@@ -26,11 +26,11 @@ namespace got_winner_voting.Controllers
         }
 
         [HttpGet("slow")]
-        public async Task<ActionResult> GetSlow()
+        public async Task<ViewResult> Slow()
         {
             await Task.Delay(3000);
 
-            return Ok("everything is a-ok");
+            return new ViewResult();
         }
     }
 }
