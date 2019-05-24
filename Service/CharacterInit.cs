@@ -48,10 +48,10 @@ namespace got_winner_voting.Service
                 chars = await conn.QueryAsync<Character>("SELECT Id, FullName FROM GoTCharacters ORDER BY Id");
             }
 
-            foreach (var character in chars)
-            {
-                cacheDb.HashSet("got", character.Id, 0);
-            }
+            // foreach (var character in chars)
+            // {
+            //     cacheDb.HashSet("got", character.Id, 0);
+            // }
 
             client.TrackDependency("Redis Cache", "Reset All Characters for Startup", "startup", date, new TimeSpan(DateTimeOffset.UtcNow.Ticks - date.Ticks), true);
         }
