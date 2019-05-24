@@ -40,7 +40,7 @@ namespace got_winner_voting.Service
 
             var date = DateTimeOffset.UtcNow;
             var cacheDb = _cache.Value.GetDatabase();
-            var result = await cacheDb.KeyDeleteAsync("got");
+            //var result = await cacheDb.KeyDeleteAsync("got");
 
             IEnumerable<Character> chars = null;
             using (var conn = new SqlConnection(_config["Azure:SQL:ConnectionString"]))
