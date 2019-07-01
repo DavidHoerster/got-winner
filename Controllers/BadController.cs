@@ -13,16 +13,15 @@ namespace got_winner_voting.Controllers
         public async Task<ActionResult> Get()
         {
             // // make it slow, too, and then fail
-            // await Task.Delay(1500);
+            await Task.Delay(1500);
 
-            // var x = 1;
-            // if (x == 1)
-            // {
-            //     throw new InvalidOperationException("You tried to do something bad");
-            // }
-
-            // return BadRequest();
-            return Ok("all good now!");
+            var x = 1;
+            if (x == 1)
+            {
+                throw new InvalidOperationException("You tried to do something bad");
+            }
+            return BadRequest();
+            // return Ok("all good now!");
         }
 
         [HttpGet("slow")]
