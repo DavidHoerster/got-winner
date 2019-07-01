@@ -5,7 +5,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using got_winner_voting.Hubs;
 using got_winner_voting.Service;
+using got_winner_voting.Service.Telemetry;
 using Microsoft.ApplicationInsights;
+using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -39,6 +41,8 @@ namespace got_winner_voting
                 new Lazy<ConnectionMultiplexer>(() =>
                     ConnectionMultiplexer.Connect(Configuration["Azure:Redis:CacheConnection"]))
             );
+
+            services.AddSingleton<ITelemetryInitializer, GameOfThronesTelemetryInitializer>();
 
             services.AddHostedService<CharacterInit>();
         }
